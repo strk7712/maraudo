@@ -145,13 +145,13 @@
     <h1>マロウドインシフト希望ツール</h1>
     <div class="container">
         <label for="year">希望する年度を数字で入力してください（例：2024）</label>
-        <input type="number" id="year" min="2000" max="2100" placeholder="2023">
+        <input type="number" id="year" min="2000" max="2100" placeholder="2024">
         
         <label for="month">希望する月を数字で入力してください（例：12/16以降の場合は12）</label>
-        <input type="number" id="month" min="1" max="12" placeholder="11">
+        <input type="number" id="month" min="1" max="12" placeholder="12">
         
         <label for="offDates">休みたい日の日付を入力してください（例：16,30,1,2）</label>
-        <input type="text" id="offDates" placeholder="例：20,22,25,1,5">
+        <input type="text" id="offDates" placeholder="16,30,1,2">
         
         <button id="generateImageButton">画像を生成</button>
     </div>
@@ -198,24 +198,24 @@
             const yearInput = document.getElementById('year').value;
             const monthInput = document.getElementById('month').value;
             const offDatesInput = document.getElementById('offDates').value;
-            
+
             const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-            
+
             let year = parseInt(yearInput);
             let month = parseInt(monthInput);
-            
+
             if (isNaN(year) || isNaN(month) || month < 1 || month > 12) {
                 alert('正しい年度と月を入力してください。');
                 return;
             }
-            
+
             const startDay = 16;
             const endDay = 15;
             const startDate = new Date(year, month - 1, startDay);
             let nextMonth = month === 12 ? 1 : month + 1;
             let nextYear = month === 12 ? year + 1 : year;
             const endDate = new Date(nextYear, nextMonth - 1, endDay);
-            
+
             // 日付リストを生成
             const dateList = [];
             let currentDate = new Date(startDate);
@@ -223,7 +223,7 @@
                 dateList.push(new Date(currentDate));
                 currentDate.setDate(currentDate.getDate() + 1);
             }
-            
+
             // 休みたい日を処理
             const dateStrings = offDatesInput.split(',');
             const offDates = [];
@@ -249,17 +249,17 @@
                     alert(`指定した日付 ${day} は期間内に存在しません。`);
                 }
             }
-            
+
             // 重複を除去してソート
             const offDatesSet = new Set(offDates.map(d => d.getTime()));
             const offDatesSorted = Array.from(offDatesSet).sort((a, b) => a - b).map(t => new Date(t));
-            
+
             // 出勤可能日を計算
             const offDatesTimeSet = new Set(offDatesSorted.map(d => d.getTime()));
             const availableDates = dateList.filter(d => !offDatesTimeSet.has(d.getTime()));
-            
-            // 結果を表示
-            // 休み希望日のテーブルを生成
+
+            // 結果を表示（非表示のまま）
+            const resultsElement = document.getElementById('results');
             const offDatesTableBody = document.querySelector('#offDatesTable tbody');
             offDatesTableBody.innerHTML = '';
             for (let date of offDatesSorted) {
@@ -270,8 +270,7 @@
                 cellDate.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
                 cellWeekday.textContent = `${weekday}`;
             }
-            
-            // 出勤可能日のテーブルを生成
+
             const availableDatesTableBody = document.querySelector('#availableDatesTable tbody');
             availableDatesTableBody.innerHTML = '';
             for (let date of availableDates) {
@@ -282,20 +281,23 @@
                 cellDate.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
                 cellWeekday.textContent = `${weekday}`;
             }
-            
-            // 画像を生成して表示
-            const resultsElement = document.getElementById('results');
-            const imageContainer = document.getElementById('imageResult');
-            imageContainer.innerHTML = '';
-            
+
+            // 一時的に結果セクションを表示して画像を生成
+            resultsElement.style.display = 'block';
             html2canvas(resultsElement).then(canvas => {
                 // Canvasを画像に変換
                 const imgData = canvas.toDataURL('image/png');
+                const imageContainer = document.getElementById('imageResult');
+                imageContainer.innerHTML = ''; // 以前の画像を削除
                 const imgElement = document.createElement('img');
                 imgElement.src = imgData;
                 imageContainer.appendChild(imgElement);
+
+                // 画像生成後に再度結果セクションを非表示に
+                resultsElement.style.display = 'none';
             });
         });
     </script>
+
 </body>
 </html>
