@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>マロウドインシフト希望ツール</title>
-    <!-- ビューポートのメタタグを更新 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* 紫を基調としたスタイル */
@@ -101,20 +100,26 @@
 
         /* 結果表示用のスタイルを追加 */
         #results {
-            padding: 60px 20px 20px 20px; /* 上部のパディングを増やす */
+            padding: 40px; /* パディングを増やしました */
             background-color: #ffffff;
             border-radius: 10px;
             color: #4b0082;
+            margin-top: 40px; /* マージンを追加しました */
+            margin-bottom: 40px; /* マージンを追加しました */
         }
 
         #results h2 {
             text-align: center;
             color: #6a0dad;
             font-weight: bold;
+            font-size: 1.5em;
+            margin-top: 40px; /* マージンを増やしました */
+            margin-bottom: 30px; /* マージンを増やしました */
         }
 
         .table-container {
-            margin: 20px 0;
+            margin: 30px 0; /* マージンを増やしました */
+            padding: 20px; /* パディングを追加しました */
         }
 
         table {
@@ -125,9 +130,9 @@
 
         table th, table td {
             border: 1px solid #cccccc;
-            padding: 10px;
+            padding: 15px;
             text-align: center;
-            font-size: 1em;
+            font-size: 1.2em;
         }
 
         table th {
@@ -166,7 +171,7 @@
     </div>
     
     <!-- resultsセクションをここに移動 -->
-    <div id="results" style="display: none;">
+    <div id="results">
         <h2>休み希望日</h2>
         <div class="table-container">
             <table id="offDatesTable">
@@ -285,12 +290,7 @@
 
             // 一時的に結果セクションを表示して画像を生成
             resultsElement.style.display = 'block';
-            html2canvas(resultsElement, {
-                scale: window.devicePixelRatio,
-                x: window.scrollX,
-                y: window.scrollY,
-                useCORS: true
-            }).then(canvas => {
+            html2canvas(resultsElement).then(canvas => {
                 // Canvasを画像に変換
                 const imgData = canvas.toDataURL('image/png');
                 const imageContainer = document.getElementById('imageResult');
@@ -307,3 +307,4 @@
 
 </body>
 </html>
+
