@@ -3,7 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <title>マロウドインシフト希望ツール</title>
-    <link rel="stylesheet" href="style.css">
+    <!-- ビューポートメタタグを追加 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSSスタイルを追加 -->
+    <style>
+        /* 紫を基調としたスタイル */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+            background-color: #f8f5f7;
+            color: #4b0082;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #6a0dad;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 1.1em;
+            color: #4b0082;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.1em;
+            margin-top: 5px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            margin-top: 20px;
+            background-color: #8a2be2;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #5a189a;
+        }
+
+        #imageContainer {
+            max-width: 600px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        #imageInstructions {
+            font-size: 1em;
+            margin-bottom: 15px;
+            color: #4b0082;
+        }
+
+        #imageResult canvas {
+            width: 100%;
+            height: auto;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+
+        /* メディアクエリでフォントサイズを調整 */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            label, input, button {
+                font-size: 1em;
+            }
+            h1, h2 {
+                font-size: 1.5em;
+            }
+        }
+
+        /* 非表示用 */
+        #results {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+        }
+
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
@@ -12,15 +115,24 @@
         <label for="year">希望する年度を数字で入力してください（例：2024）</label>
         <input type="number" id="year" min="2000" max="2100" placeholder="2023">
         
-        <label for="month">希望する月を数字で入力してください（例：11）</label>
+        <label for="month">希望する月を数字で入力してください（例：12/16以降の場合は12）</label>
         <input type="number" id="month" min="1" max="12" placeholder="11">
         
         <label for="offDates">休みたい日の日付を入力してください（例：16,30,1,2）</label>
         <input type="text" id="offDates" placeholder="例：20,22,25,1,5">
         
-        <button id="calculateButton">計算する</button>
-        <button id="saveImageButton">画像として保存</button>
+        <button id="generateImageButton">画像を生成</button>
     </div>
+    <div id="imageContainer">
+        <h2>画像を保存するには以下を長押ししてください</h2>
+        <div id="imageInstructions">
+            スマートフォンの場合：画像を長押しして「保存」を選択してください。<br>
+            PCの場合：右クリックして「名前を付けて画像を保存」を選択してください。
+        </div>
+        <div id="imageResult"></div>
+    </div>
+    
+    <!-- resultsセクションをここに移動 -->
     <div id="results">
         <h2>休み希望日</h2>
         <ul id="offDatesList"></ul>
@@ -30,7 +142,7 @@
     </div>
     
     <script>
-        document.getElementById('calculateButton').addEventListener('click', function() {
+        document.getElementById('generateImageButton').addEventListener('click', function() {
             const yearInput = document.getElementById('year').value;
             const monthInput = document.getElementById('month').value;
             const offDatesInput = document.getElementById('offDates').value;
@@ -112,19 +224,17 @@
                 li.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}（${weekday}）`;
                 availableDatesList.appendChild(li);
             }
-        });
-    </script>
-
-    <script>
-        document.getElementById('saveImageButton').addEventListener('click', function() {
+            
+            // 画像を生成して表示
             const resultsElement = document.getElementById('results');
+            const imageContainer = document.getElementById('imageResult');
+            imageContainer.innerHTML = '';
+            
             html2canvas(resultsElement).then(canvas => {
-                const link = document.createElement('a');
-                link.download = '出勤可能日結果.png';
-                link.href = canvas.toDataURL();
-                link.click();
+                imageContainer.appendChild(canvas);
             });
         });
     </script>
 </body>
 </html>
+
