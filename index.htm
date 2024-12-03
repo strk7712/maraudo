@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>マロウドインシフト希望ツール</title>
-    <!-- ビューポートメタタグを追加 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- CSSスタイルを追加 -->
     <style>
         /* 紫を基調としたスタイル */
         body {
@@ -79,7 +77,8 @@
             color: #4b0082;
         }
 
-        #imageResult canvas {
+        /* 修正: Canvasではなくimgタグにスタイルを適用 */
+        #imageResult img {
             width: 100%;
             height: auto;
             border: 1px solid #cccccc;
@@ -231,10 +230,13 @@
             imageContainer.innerHTML = '';
             
             html2canvas(resultsElement).then(canvas => {
-                imageContainer.appendChild(canvas);
+                // Canvasを画像に変換
+                const imgData = canvas.toDataURL('image/png');
+                const imgElement = document.createElement('img');
+                imgElement.src = imgData;
+                imageContainer.appendChild(imgElement);
             });
         });
     </script>
 </body>
 </html>
-
