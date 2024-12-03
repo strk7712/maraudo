@@ -109,15 +109,14 @@
             }
         }
 
-        /* 結果表示用のスタイルを追加 */
+        /* 結果表示用のスタイルを元に戻す */
         #results {
-            padding: 40px;
+            padding: 20px; /* 元のパディングに戻しました */
             background-color: #ffffff;
             border-radius: 10px;
             color: #4b0082;
-            /* 安全領域を考慮したマージンを追加 */
-            margin-top: calc(40px + env(safe-area-inset-top));
-            margin-bottom: calc(40px + env(safe-area-inset-bottom));
+            margin-top: 0; /* マージンを元に戻しました */
+            margin-bottom: 0; /* マージンを元に戻しました */
         }
 
         #results h2 {
@@ -125,13 +124,13 @@
             color: #6a0dad;
             font-weight: bold;
             font-size: 1.5em;
-            margin-top: 40px;
-            margin-bottom: 30px;
+            margin-top: 0; /* マージンを元に戻しました */
+            margin-bottom: 0; /* マージンを元に戻しました */
         }
 
         .table-container {
-            margin: 30px 0;
-            padding: 20px;
+            margin: 20px 0; /* 元のマージンに戻しました */
+            padding: 0; /* パディングを元に戻しました */
         }
 
         table {
@@ -142,9 +141,9 @@
 
         table th, table td {
             border: 1px solid #cccccc;
-            padding: 15px;
+            padding: 15px; /* フォントサイズを大きくしたまま */
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.2em; /* フォントサイズはそのまま */
         }
 
         table th {
@@ -183,7 +182,7 @@
         <div id="imageResult"></div>
     </div>
     
-    <!-- resultsセクションをここに移動 -->
+    <!-- resultsセクション -->
     <div id="results">
         <h2>休み希望日</h2>
         <div class="table-container">
