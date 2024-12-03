@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>マロウドインシフト希望ツール</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- ビューポートのメタタグを更新 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <style>
         /* 紫を基調としたスタイル */
         body {
@@ -100,20 +101,24 @@
 
         /* 結果表示用のスタイルを追加 */
         #results {
-            padding: 20px;
+            /* 安全領域を考慮したパディングを追加 */
+            padding-top: calc(20px + env(safe-area-inset-top));
+            padding-right: calc(20px + env(safe-area-inset-right));
+            padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            padding-left: calc(20px + env(safe-area-inset-left));
             background-color: #ffffff;
             border-radius: 10px;
             color: #4b0082;
         }
 
-        .table-container-wrapper {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
+        #results h2 {
+            text-align: center;
+            color: #6a0dad;
+            font-weight: bold;
         }
 
         .table-container {
-            flex: 1;
+            margin: 20px 0;
         }
 
         table {
@@ -137,6 +142,7 @@
         table tr:nth-child(even) {
             background-color: #f9f5fb;
         }
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -144,13 +150,13 @@
     <h1>マロウドインシフト希望ツール</h1>
     <div class="container">
         <label for="year">希望する年度を数字で入力してください（例：2024）</label>
-        <input type="number" id="year" min="2000" max="2100" placeholder="2024">
+        <input type="number" id="year" min="2000" max="2100" placeholder="2023">
         
         <label for="month">希望する月を数字で入力してください（例：12/16以降の場合は12）</label>
-        <input type="number" id="month" min="1" max="12" placeholder="12">
+        <input type="number" id="month" min="1" max="12" placeholder="11">
         
         <label for="offDates">休みたい日の日付を入力してください（例：16,30,1,2）</label>
-        <input type="text" id="offDates" placeholder="16,30,1,2">
+        <input type="text" id="offDates" placeholder="例：20,22,25,1,5">
         
         <button id="generateImageButton">画像を生成</button>
     </div>
@@ -164,33 +170,31 @@
     </div>
     
     <!-- resultsセクションをここに移動 -->
-    <div id="results">
-        <div class="table-container-wrapper">
-            <div class="table-container">
-                <h2>休み希望日</h2>
-                <table id="offDatesTable">
-                    <thead>
-                        <tr>
-                            <th>日付</th>
-                            <th>曜日</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-            
-            <div class="table-container">
-                <h2>出勤可能日</h2>
-                <table id="availableDatesTable">
-                    <thead>
-                        <tr>
-                            <th>日付</th>
-                            <th>曜日</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+    <div id="results" style="display: none;">
+        <h2>休み希望日</h2>
+        <div class="table-container">
+            <table id="offDatesTable">
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>曜日</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <h2>出勤可能日</h2>
+        <div class="table-container">
+            <table id="availableDatesTable">
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>曜日</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
     
@@ -285,7 +289,7 @@
 
             // 一時的に結果セクションを表示して画像を生成
             resultsElement.style.display = 'block';
-            html2canvas(resultsElement).then(canvas => {
+            html2canvas(resultsElement, { scale: window.devicePixelRatio }).then(canvas => {
                 // Canvasを画像に変換
                 const imgData = canvas.toDataURL('image/png');
                 const imageContainer = document.getElementById('imageResult');
@@ -299,5 +303,6 @@
             });
         });
     </script>
+
 </body>
 </html>
