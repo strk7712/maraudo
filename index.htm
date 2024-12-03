@@ -15,9 +15,13 @@
             background-color: #f8f5f7;
             color: #4b0082;
             /* 安全領域を考慮したパディングを追加 */
+            padding-top: calc(20px + constant(safe-area-inset-top));
             padding-top: calc(20px + env(safe-area-inset-top));
+            padding-bottom: calc(20px + constant(safe-area-inset-bottom));
             padding-bottom: calc(20px + env(safe-area-inset-bottom));
+            padding-left: calc(20px + constant(safe-area-inset-left));
             padding-left: calc(20px + env(safe-area-inset-left));
+            padding-right: calc(20px + constant(safe-area-inset-right));
             padding-right: calc(20px + env(safe-area-inset-right));
         }
 
@@ -96,9 +100,13 @@
             body {
                 padding: 10px;
                 /* 安全領域を考慮したパディングを再設定 */
+                padding-top: calc(10px + constant(safe-area-inset-top));
                 padding-top: calc(10px + env(safe-area-inset-top));
+                padding-bottom: calc(10px + constant(safe-area-inset-bottom));
                 padding-bottom: calc(10px + env(safe-area-inset-bottom));
+                padding-left: calc(10px + constant(safe-area-inset-left));
                 padding-left: calc(10px + env(safe-area-inset-left));
+                padding-right: calc(10px + constant(safe-area-inset-right));
                 padding-right: calc(10px + env(safe-area-inset-right));
             }
             label, input, button {
@@ -109,14 +117,13 @@
             }
         }
 
-        /* 結果表示用のスタイルを元に戻す */
+        /* 結果表示用のスタイルを調整 */
         #results {
-            padding: 20px; /* 元のパディングに戻しました */
+            padding: 20px;
             background-color: #ffffff;
             border-radius: 10px;
             color: #4b0082;
-            margin-top: 0; /* マージンを元に戻しました */
-            margin-bottom: 0; /* マージンを元に戻しました */
+            margin-top: 20px; /* 上部に余白を追加 */
         }
 
         #results h2 {
@@ -124,13 +131,13 @@
             color: #6a0dad;
             font-weight: bold;
             font-size: 1.5em;
-            margin-top: 0; /* マージンを元に戻しました */
-            margin-bottom: 0; /* マージンを元に戻しました */
+            margin-top: 0;
+            margin-bottom: 0;
         }
 
         .table-container {
-            margin: 20px 0; /* 元のマージンに戻しました */
-            padding: 0; /* パディングを元に戻しました */
+            margin: 20px 0;
+            padding: 0;
         }
 
         table {
@@ -141,9 +148,9 @@
 
         table th, table td {
             border: 1px solid #cccccc;
-            padding: 15px; /* フォントサイズを大きくしたまま */
+            padding: 15px;
             text-align: center;
-            font-size: 1.2em; /* フォントサイズはそのまま */
+            font-size: 1.2em;
         }
 
         table th {
