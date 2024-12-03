@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>マロウドインシフト希望ツール</title>
     <link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
     <h1>マロウドインシフト希望ツール</h1>
@@ -19,7 +19,7 @@
         <input type="text" id="offDates" placeholder="例：20,22,25,1,5">
         
         <button id="calculateButton">計算する</button>
-<button id="saveImageButton">画像として保存</button>
+        <button id="saveImageButton">画像として保存</button>
     </div>
     <div id="results">
         <h2>休み希望日</h2>
@@ -35,7 +35,7 @@
             const monthInput = document.getElementById('month').value;
             const offDatesInput = document.getElementById('offDates').value;
             
-            const weekdays = ['月', '火', '水', '木', '金', '土', '日'];
+            const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
             
             let year = parseInt(yearInput);
             let month = parseInt(monthInput);
@@ -65,6 +65,7 @@
             const offDates = [];
             for (let dateStr of dateStrings) {
                 dateStr = dateStr.trim();
+                if (dateStr === '') continue;
                 let day = parseInt(dateStr);
                 if (isNaN(day)) {
                     alert(`正しい日付を入力してください：${dateStr}`);
@@ -72,20 +73,16 @@
                 }
                 let dateAdded = false;
                 for (let [y, m] of [[year, month], [nextYear, nextMonth]]) {
-                    let date;
-                    try {
-                        date = new Date(y, m - 1, day);
-                        if (date >= startDate && date <= endDate) {
-                            offDates.push(date);
-                            dateAdded = true;
-                            break;
-                        }
-                    } catch {
-                        continue;
+                    let date = new Date(y, m - 1, day);
+                    // 月がずれていないか確認（存在しない日付を除外）
+                    if (date.getDate() === day && date >= startDate && date <= endDate) {
+                        offDates.push(date);
+                        dateAdded = true;
+                        break;
                     }
                 }
                 if (!dateAdded) {
-                    alert(`指定した日付 ${day} は期間外か存在しません。`);
+                    alert(`指定した日付 ${day} は期間内に存在しません。`);
                 }
             }
             
@@ -129,6 +126,5 @@
             });
         });
     </script>
-    </body>
-    
+</body>
 </html>
