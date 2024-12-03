@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>マロウドインシフト希望ツール</title>
-    <!-- Viewportの設定にviewport-fit=coverを追加 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         /* 紫を基調としたスタイル */
         body {
@@ -14,15 +13,6 @@
             line-height: 1.6;
             background-color: #f8f5f7;
             color: #4b0082;
-            /* 安全領域を考慮したパディングを追加 */
-            padding-top: calc(20px + constant(safe-area-inset-top));
-            padding-top: calc(20px + env(safe-area-inset-top));
-            padding-bottom: calc(20px + constant(safe-area-inset-bottom));
-            padding-bottom: calc(20px + env(safe-area-inset-bottom));
-            padding-left: calc(20px + constant(safe-area-inset-left));
-            padding-left: calc(20px + env(safe-area-inset-left));
-            padding-right: calc(20px + constant(safe-area-inset-right));
-            padding-right: calc(20px + env(safe-area-inset-right));
         }
 
         h1, h2 {
@@ -99,15 +89,6 @@
         @media (max-width: 600px) {
             body {
                 padding: 10px;
-                /* 安全領域を考慮したパディングを再設定 */
-                padding-top: calc(10px + constant(safe-area-inset-top));
-                padding-top: calc(10px + env(safe-area-inset-top));
-                padding-bottom: calc(10px + constant(safe-area-inset-bottom));
-                padding-bottom: calc(10px + env(safe-area-inset-bottom));
-                padding-left: calc(10px + constant(safe-area-inset-left));
-                padding-left: calc(10px + env(safe-area-inset-left));
-                padding-right: calc(10px + constant(safe-area-inset-right));
-                padding-right: calc(10px + env(safe-area-inset-right));
             }
             label, input, button {
                 font-size: 1em;
@@ -117,27 +98,27 @@
             }
         }
 
-        /* 結果表示用のスタイルを調整 */
+        /* 結果表示用のスタイルを追加 */
         #results {
             padding: 20px;
             background-color: #ffffff;
             border-radius: 10px;
             color: #4b0082;
-            margin-top: 20px; /* 上部に余白を追加 */
         }
 
         #results h2 {
             text-align: center;
             color: #6a0dad;
             font-weight: bold;
-            font-size: 1.5em;
-            margin-top: 0;
-            margin-bottom: 0;
+        }
+
+        /* ここに以下のスタイルを追加 */
+        #results h2:first-of-type {
+            margin-top: 30px; /* 余白の大きさはお好みで調整してください */
         }
 
         .table-container {
             margin: 20px 0;
-            padding: 0;
         }
 
         table {
@@ -148,9 +129,9 @@
 
         table th, table td {
             border: 1px solid #cccccc;
-            padding: 15px;
+            padding: 10px;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1em;
         }
 
         table th {
@@ -163,8 +144,7 @@
         }
 
     </style>
-    <!-- html2canvasの最新バージョンを使用 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
     <h1>マロウドインシフト希望ツール</h1>
@@ -189,7 +169,7 @@
         <div id="imageResult"></div>
     </div>
     
-    <!-- resultsセクション -->
+    <!-- resultsセクションをここに移動 -->
     <div id="results">
         <h2>休み希望日</h2>
         <div class="table-container">
@@ -309,22 +289,7 @@
 
             // 一時的に結果セクションを表示して画像を生成
             resultsElement.style.display = 'block';
-
-            // 画像サイズを指定するオプションを追加し、安全領域を考慮
-            const options = {
-                width: resultsElement.scrollWidth,
-                height: resultsElement.scrollHeight,
-                scale: 2,
-                useCORS: true,
-                x: 0,
-                y: 0,
-                scrollX: 0,
-                scrollY: 0,
-                windowWidth: window.innerWidth,
-                windowHeight: window.innerHeight
-            };
-
-            html2canvas(resultsElement, options).then(canvas => {
+            html2canvas(resultsElement).then(canvas => {
                 // Canvasを画像に変換
                 const imgData = canvas.toDataURL('image/png');
                 const imageContainer = document.getElementById('imageResult');
