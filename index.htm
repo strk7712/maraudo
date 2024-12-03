@@ -98,11 +98,44 @@
             }
         }
 
-        /* 非表示用 */
+        /* 結果表示用のスタイルを追加 */
         #results {
-            position: absolute;
-            left: -9999px;
-            top: 0;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            color: #4b0082;
+        }
+
+        #results h2 {
+            text-align: center;
+            color: #6a0dad;
+            font-weight: bold;
+        }
+
+        .table-container {
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #cccccc;
+            padding: 10px;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        table th {
+            background-color: #e0d7ec;
+            color: #4b0082;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f5fb;
         }
 
     </style>
@@ -134,10 +167,30 @@
     <!-- resultsセクションをここに移動 -->
     <div id="results">
         <h2>休み希望日</h2>
-        <ul id="offDatesList"></ul>
+        <div class="table-container">
+            <table id="offDatesTable">
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>曜日</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
         
         <h2>出勤可能日</h2>
-        <ul id="availableDatesList"></ul>
+        <div class="table-container">
+            <table id="availableDatesTable">
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>曜日</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
     </div>
     
     <script>
@@ -206,22 +259,28 @@
             const availableDates = dateList.filter(d => !offDatesTimeSet.has(d.getTime()));
             
             // 結果を表示
-            const offDatesList = document.getElementById('offDatesList');
-            offDatesList.innerHTML = '';
+            // 休み希望日のテーブルを生成
+            const offDatesTableBody = document.querySelector('#offDatesTable tbody');
+            offDatesTableBody.innerHTML = '';
             for (let date of offDatesSorted) {
-                const li = document.createElement('li');
+                const row = offDatesTableBody.insertRow();
+                const cellDate = row.insertCell();
+                const cellWeekday = row.insertCell();
                 const weekday = weekdays[date.getDay()];
-                li.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}（${weekday}）`;
-                offDatesList.appendChild(li);
+                cellDate.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
+                cellWeekday.textContent = `${weekday}`;
             }
             
-            const availableDatesList = document.getElementById('availableDatesList');
-            availableDatesList.innerHTML = '';
+            // 出勤可能日のテーブルを生成
+            const availableDatesTableBody = document.querySelector('#availableDatesTable tbody');
+            availableDatesTableBody.innerHTML = '';
             for (let date of availableDates) {
-                const li = document.createElement('li');
+                const row = availableDatesTableBody.insertRow();
+                const cellDate = row.insertCell();
+                const cellWeekday = row.insertCell();
                 const weekday = weekdays[date.getDay()];
-                li.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}（${weekday}）`;
-                availableDatesList.appendChild(li);
+                cellDate.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
+                cellWeekday.textContent = `${weekday}`;
             }
             
             // 画像を生成して表示
