@@ -5,142 +5,145 @@
     <title>マロウドインシフト希望ツール</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* 紫を基調としたスタイル */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-            background-color: #f8f5f7;
-            color: #4b0082;
-        }
+      /* 紫を基調としたスタイル */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    background-color: #f8f5f7;
+    color: #4b0082;
+}
 
-        h1, h2 {
-            text-align: center;
-            color: #6a0dad;
-            font-weight: bold;
-        }
+h1, h2 {
+    text-align: center;
+    color: #6a0dad;
+    font-weight: bold;
+}
 
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
 
-        label {
-            display: block;
-            margin-top: 15px;
-            font-size: 1.1em;
-            color: #4b0082;
-        }
+label {
+    display: block;
+    margin-top: 15px;
+    font-size: 1.1em;
+    color: #4b0082;
+}
 
-        input[type="number"],
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 1.1em;
-            margin-top: 5px;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
+input[type="number"],
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1.1em;
+    margin-top: 5px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
 
-        button {
-            width: 100%;
-            padding: 15px;
-            font-size: 1.2em;
-            margin-top: 20px;
-            background-color: #8a2be2;
-            color: #ffffff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+button {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    margin-top: 20px;
+    background-color: #8a2be2;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-        button:hover {
-            background-color: #5a189a;
-        }
+button:hover {
+    background-color: #5a189a;
+}
 
-        #imageContainer {
-            max-width: 600px;
-            margin: 20px auto;
-            text-align: center;
-        }
+#imageContainer {
+    max-width: 600px;
+    margin: 20px auto;
+    text-align: center;
+}
 
-        #imageInstructions {
-            font-size: 1em;
-            margin-bottom: 15px;
-            color: #4b0082;
-        }
+#imageInstructions {
+    font-size: 1em;
+    margin-bottom: 15px;
+    color: #4b0082;
+}
 
-        /* 修正: Canvasではなくimgタグにスタイルを適用 */
-        #imageResult img {
-            width: 100%;
-            height: auto;
-            border: 1px solid #cccccc;
-            border-radius: 5px;
-        }
+/* 修正: Canvasではなくimgタグにスタイルを適用 */
+#imageResult img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+}
 
-        /* メディアクエリでフォントサイズを調整 */
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            label, input, button {
-                font-size: 1em;
-            }
-            h1, h2 {
-                font-size: 1.5em;
-            }
-        }
+/* メディアクエリでフォントサイズを調整 */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    label, input, button {
+        font-size: 1em;
+    }
+    h1, h2 {
+        font-size: 1.5em;
+    }
+}
 
-        /* 結果表示用のスタイルを追加 */
-        #results {
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            color: #4b0082;
-        }
+/* 結果表示用のスタイルを追加 */
+#results {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    color: #4b0082;
+}
 
-        #results h2 {
-            text-align: center;
-            color: #6a0dad;
-            font-weight: bold;
-        }
+#results h2 {
+    text-align: center;
+    color: #6a0dad;
+    font-weight: bold;
+}
 
-        #results h2:first-of-type {
-            margin-top: 60px; /* 余白の大きさはお好みで調整してください */
-        }
+/* ここを削除または 0 に変える 
+#results h2:first-of-type {
+    margin-top: 60px;
+}
+*/
 
-        .table-container {
-            margin: 20px 0;
-        }
+.table-container {
+    margin: 20px 0;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
 
-        table th, table td {
-            border: 1px solid #cccccc;
-            padding: 10px;
-            text-align: center;
-            font-size: 1em;
-        }
+table th, table td {
+    border: 1px solid #cccccc;
+    padding: 10px;
+    text-align: center;
+    font-size: 1em;
+}
 
-        table th {
-            background-color: #e0d7ec;
-            color: #4b0082;
-        }
+table th {
+    background-color: #e0d7ec;
+    color: #4b0082;
+}
 
-        table tr:nth-child(even) {
-            background-color: #f9f5fb;
-        }
+table tr:nth-child(even) {
+    background-color: #f9f5fb;
+}
+
     </style>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
