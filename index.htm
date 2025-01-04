@@ -112,7 +112,6 @@
             font-weight: bold;
         }
 
-        /* ここに以下のスタイルを追加 */
         #results h2:first-of-type {
             margin-top: 60px; /* 余白の大きさはお好みで調整してください */
         }
@@ -142,7 +141,6 @@
         table tr:nth-child(even) {
             background-color: #f9f5fb;
         }
-
     </style>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -169,24 +167,11 @@
         <div id="imageResult"></div>
     </div>
     
-    <!-- resultsセクションをここに移動 -->
+    <!-- 「休み希望日」だけを表示する結果セクション -->
     <div id="results">
         <h2>休み希望日</h2>
         <div class="table-container">
             <table id="offDatesTable">
-                <thead>
-                    <tr>
-                        <th>日付</th>
-                        <th>曜日</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-        
-        <h2>出勤可能日</h2>
-        <div class="table-container">
-            <table id="availableDatesTable">
                 <thead>
                     <tr>
                         <th>日付</th>
@@ -214,14 +199,16 @@
                 return;
             }
 
+            // 集計期間: 前月16日〜当月15日ではなく
+            // 今回は month が指定された場合、month 月の 16日 〜 翌月の 15日 を想定
             const startDay = 16;
             const endDay = 15;
             const startDate = new Date(year, month - 1, startDay);
-            let nextMonth = month === 12 ? 1 : month + 1;
-            let nextYear = month === 12 ? year + 1 : year;
+            let nextMonth = (month === 12) ? 1 : (month + 1);
+            let nextYear = (month === 12) ? (year + 1) : year;
             const endDate = new Date(nextYear, nextMonth - 1, endDay);
 
-            // 日付リストを生成
+            // 全日付のリストを生成
             const dateList = [];
             let currentDate = new Date(startDate);
             while (currentDate <= endDate) {
@@ -229,7 +216,7 @@
                 currentDate.setDate(currentDate.getDate() + 1);
             }
 
-            // 休みたい日を処理
+            // 休みたい日を抽出
             const dateStrings = offDatesInput.split(',');
             const offDates = [];
             for (let dateStr of dateStrings) {
@@ -241,6 +228,7 @@
                     continue;
                 }
                 let dateAdded = false;
+                // 入力された日付が、startDate〜endDateの間に存在するか確認
                 for (let [y, m] of [[year, month], [nextYear, nextMonth]]) {
                     let date = new Date(y, m - 1, day);
                     // 月がずれていないか確認（存在しない日付を除外）
@@ -259,11 +247,7 @@
             const offDatesSet = new Set(offDates.map(d => d.getTime()));
             const offDatesSorted = Array.from(offDatesSet).sort((a, b) => a - b).map(t => new Date(t));
 
-            // 出勤可能日を計算
-            const offDatesTimeSet = new Set(offDatesSorted.map(d => d.getTime()));
-            const availableDates = dateList.filter(d => !offDatesTimeSet.has(d.getTime()));
-
-            // 結果を表示（非表示のまま）
+            // 結果をテーブルに表示
             const resultsElement = document.getElementById('results');
             const offDatesTableBody = document.querySelector('#offDatesTable tbody');
             offDatesTableBody.innerHTML = '';
@@ -273,18 +257,7 @@
                 const cellWeekday = row.insertCell();
                 const weekday = weekdays[date.getDay()];
                 cellDate.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
-                cellWeekday.textContent = `${weekday}`;
-            }
-
-            const availableDatesTableBody = document.querySelector('#availableDatesTable tbody');
-            availableDatesTableBody.innerHTML = '';
-            for (let date of availableDates) {
-                const row = availableDatesTableBody.insertRow();
-                const cellDate = row.insertCell();
-                const cellWeekday = row.insertCell();
-                const weekday = weekdays[date.getDay()];
-                cellDate.textContent = `${date.getFullYear()}-${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}`;
-                cellWeekday.textContent = `${weekday}`;
+                cellWeekday.textContent = weekday;
             }
 
             // 一時的に結果セクションを表示して画像を生成
